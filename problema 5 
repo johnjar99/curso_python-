@@ -1,0 +1,169 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOlDmf6jyIXUz+rhIyeagYP",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "accelerator": "GPU",
+    "gpuClass": "standard"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/johnjar99/curso_python-/blob/main/problema%205%20\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "nYEsx5vettey"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "\n",
+        "data = np.array([[3, 10], [4, 12], [5, 12], [7, 20], [8, 25], [9, 25], [9, 35], [11, 35], [21, 45], [15, 40], [18, 60], [9, 30], [12, 40], [14, 60], [16, 65], [16, 65], [3, 20], [1, 7], [2, 10], [1, 10], [8, 30], [14, 40], [9, 35], [19, 55], [14, 50], [13, 60]])\n",
+        "\n",
+        "peso = data[:,0]\n",
+        "precio = data[:,1]\n",
+        "\n",
+        "peso_media = np.mean(peso)\n",
+        "precio_media = np.mean(precio)\n",
+        "\n",
+        "peso_std = np.std(peso)\n",
+        "precio_std = np.std(precio)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "corr = np.corrcoef(peso, precio)[0][1]\n",
+        "b1 = corr * (precio_std / peso_std)\n",
+        "b0 = precio_media - b1 * peso_media\n",
+        "print(b1,b0)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "LDbhNcz3t6Zr",
+        "outputId": "64c36515-b800-41d8-f97a-7f4ced2ef696"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "2.937005322841934 4.97852348993289\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "n = len(peso)\n",
+        "t = b1 / (precio_std / np.sqrt(n - 2))\n",
+        "print(t,n)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2g5kb1opuvav",
+        "outputId": "771687a5-7a76-4e54-fdff-6d23425da63f"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.7783617263840888 26\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "x = 10\n",
+        "y_est = 5.76 + 2.68 * x"
+      ],
+      "metadata": {
+        "id": "oEzwcvHfvF3n"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "y_estimados = 5.76 + 2.68 * peso\n",
+        "residuos = precio - y_estimados\n",
+        "s = np.std(residuos, ddof=1)\n",
+        "print(s)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "OuMtdh9HvH-I",
+        "outputId": "cc831f2f-7497-4776-9118-94533740fc88"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "8.417775331906972\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "margen_error = t * (s / np.sqrt(n))\n",
+        "intervalo_confianza = (y_est - margen_error, y_est + margen_error)\n",
+        "print(intervalo_confianza)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "DKNR1qsRvMUM",
+        "outputId": "7778da58-2fbb-47b1-d1d2-a4231d8d2fa2"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "(29.159225177016413, 35.96077482298359)\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
